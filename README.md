@@ -86,5 +86,5 @@ There are two different ways to register them:
 More info on [why you would use one method over the other here](https://www.keycloak.org/docs/latest/server_development/#registering-provider-implementations).
 
 All SPIs added using both methods will be added to Keycloak after issuing the `npm start` command. If you are doing 
-SPI development and are frequently updating it for testing, you may drop the .jar file into the ``keycloak/standalone/deployments` 
+SPI development and are frequently updating it for testing, you may drop the .jar file into the `keycloak/standalone/deployments` 
 folder and issue a `npm run update` command to update the SPI live without having to re-build the Container. This only works with deployments and not SPIs added as Modules.
