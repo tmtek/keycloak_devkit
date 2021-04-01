@@ -1,0 +1,8 @@
+version: '3'
+services:
+  keycloak:
+    container_name: %keycloak.container.name%
+    image:  %keycloak.container.image%
+    ports:
+      - %keycloak.container.port%:8080
+    %volumes%

@@ -1,0 +1,37 @@
+{
+	"name": "keycloak_devkit",
+	"version": "0.0.1",
+	"keycloak": {
+		"themes": [
+			{ "name":"DevTheme", "dir": "./src"}
+		],
+		"container": {
+			"port": "9001",
+			"image":"keycloak:devkit",
+			"name":"KeycloakDevKit"
+		},
+		"admin": {
+			"username": "admin",
+			"password": "admin"
+		}
+	},
+	"scripts": {
+		"docker:build": "node scripts/docker-build.js",
+		"docker:down": "docker-compose down",
+		"docker:up": "docker-compose up",
+
+		"keycloak:updateDeployments": "node scripts/keycloak-updateDeployments.js",
+		"keycloak:updateThemes": "node scripts/keycloak-updateThemes.js",
+		"keycloak:update":"npm run keycloak:updateDeployments; npm run keycloak:updateThemes",
+
+		
+		"start": "npm run docker:build; npm run docker:up",
+		"clean": "npm run docker:down",
+		"update":"npm run keycloak:update"
+	},
+	"devDependencies": {
+		"copyfiles": "^2.4.0",
+		"replace-in-file": "^6.1.0",
+		"dlv": "^1.1.3"
+	}
+}
