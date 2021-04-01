@@ -1,6 +1,6 @@
 # Keycloak Development Kit
 
-This is a template project used to build and test Keycloak Themes and Service Provider Interfaces (SPIs). It can be used to easily standup an configurable instance of Keycloak using Docker and import SPIs, Themes, and Realms. You may also use it to author themes live with Keycloak running.
+This is a template project used to build and test Keycloak Themes and Service Provider Interfaces (SPIs). It can be used to easily standup a configurable instance of Keycloak using Docker and import SPIs, Themes, and Realms. You may also use it to author themes live with Keycloak running.
 
 
 ## Commands
