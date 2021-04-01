@@ -2,6 +2,11 @@
 
 This is a template project used to build and test Keycloak Themes and Service Provider Interfaces (SPIs). It can be used to easily standup a configurable instance of Keycloak using Docker and import SPIs, Themes, and Realms. You may also use it to author themes live with Keycloak running.
 
+## Requirements
+
+* [Docker](https://docs.docker.com/get-docker/)
+* [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+
 
 ## Commands
 * `npm i`: Use this to download all dependencies for this project.
