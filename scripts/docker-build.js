@@ -32,11 +32,11 @@ function populateArg(path) {
 }
 
 function populateThemes() {
-	const themes = packageJs.keycloak.themes.map(({dir, name}) => `- "${dir}:/opt/jboss/keycloak/themes/${name}"`);
+	const themes = packageJs.keycloak.themes.map(({dir, name}) => `      - "${dir}:/opt/jboss/keycloak/themes/${name}"`);
 	replace.sync({
 		files:`./docker-compose.yml`,
 		from:`%volumes%`,
-		to:themes.length > 0 ? 'volumes:\n    ' + themes.join('\n      ') : ''
+		to:themes.length > 0 ? 'volumes:\n' + themes.join('\n') : ''
 	});
 }
 
