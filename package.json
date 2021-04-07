@@ -26,7 +26,7 @@
 
 		
 		"start": "npm run docker:build; npm run docker:up",
-		"clean": "npm run docker:down",
+		"stop": "npm run docker:down",
 		"update":"npm run keycloak:update"
 	},
 	"devDependencies": {
