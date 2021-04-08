@@ -3,7 +3,10 @@
 	"version": "0.0.1",
 	"keycloak": {
 		"themes": [
-			{ "name":"DevTheme", "dir": "./src"}
+			{ "name":"DevTheme", "dir": "./src/example-theme"}
+		],
+		"spi":[
+			"./src/example-spi"
 		],
 		"container": {
 			"port": "9001",
@@ -22,7 +25,8 @@
 
 		"keycloak:updateDeployments": "node scripts/keycloak-updateDeployments.js",
 		"keycloak:updateThemes": "node scripts/keycloak-updateThemes.js",
-		"keycloak:update":"npm run keycloak:updateDeployments; npm run keycloak:updateThemes",
+		"keycloak:buildSPIs": "node scripts/keycloak-buildSPIs.js",
+		"keycloak:update":"npm run keycloak:updateDeployments; npm run keycloak:updateThemes; npm run keycloak:buildSPIs",
 
 		
 		"start": "npm run docker:build; npm run docker:up",
