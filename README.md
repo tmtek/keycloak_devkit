@@ -1,11 +1,12 @@
 # Keycloak Development Kit
 
-This is a template project used to build and test Keycloak Themes and Service Provider Interfaces (SPIs). It can be used to easily standup a configurable instance of Keycloak using Docker and import SPIs, Themes, and Realms. You may also use it to author themes live with Keycloak running.
+This is a template project used to build and test Keycloak Themes and Service Provider Interfaces (SPIs). It can be used to easily standup a configurable instance of Keycloak using Docker and importing SPIs, Themes, and Realms. You may also use it to author themes and SPIs live with Keycloak running.
 
 ## Requirements
 
-* [Docker](https://docs.docker.com/get-docker/)
 * [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+* [Docker](https://docs.docker.com/get-docker/)
+* [Maven](https://maven.apache.org/install.html) (for SPI authroing)
 
 
 ## Commands
@@ -27,13 +28,16 @@ The Keycloak instance is configured using the keycloak object of the `package.js
 			"image":"keycloak:dev",
 			"name":"KeycloakDevKit"
 		},
-		"themes": [
-			{ "name":"DevTheme", "dir": "./src"}
-		],
 		"admin": {
 			"username": "admin",
 			"password": "admin"
-		}
+		},
+		"themes": [
+			{ "name":"DevTheme", "dir": "./src/example-theme"}
+		],
+		"spi":[
+			"./src/example-spi"
+		]
 	}
 }
 ```
