@@ -78,12 +78,13 @@ In the example above, the `src` folder is registered as the container for a new 
 
 [Details on building and extending Themes can be found here](https://www.keycloak.org/docs/latest/server_development/#_themes).
 
-
-## Testing SPIs
+## Authoring SPIs
 
 Keycloak [Service Provider Interfaces (SPIs)](https://www.keycloak.org/docs/latest/server_development/#_providers) can be easily mounted and tested using this project. They are .jar files that extend or add new capabilities.
 
-There are two different ways to register them:
+### Static SPIs
+
+Static SPIs are already completed and ready to drop in to Keycloak for use. You will be able to take the .jar files(and sometimes other files) and place them into one of the following folders:
 
 * `keycloak/standalone/deployments` : Use the Keycloak Deployer(auto-magic!).
 * `keycloak/modules` : Register manually as a Module.
@@ -93,3 +94,29 @@ More info on [why you would use one method over the other here](https://www.keyc
 All SPIs added using both methods will be added to Keycloak after issuing the `npm start` command. If you are doing 
 SPI development and are frequently updating it for testing, you may drop the .jar file into the `keycloak/standalone/deployments` 
 folder and issue a `npm run update` command to update the SPI live without having to re-build the Container. This only works with deployments and not SPIs added as Modules.
+
+
+### Authorable SPIs
+
+If you want to use this kit to test an SPI while you are developing it, you may drop the complete project for it into the `src` folder of this project. You will need to register the SPI in the package JSON file like so:
+
+```
+{
+	"keycloak": {
+		"spi":[
+			"./src/example-spi"
+		]
+	}
+}
+
+```
+
+You only need to specify the folder your SPI project resides in.
+
+#### Build and Deploy your SPI
+
+When the `npm run update` is issued and you have a registered authorable SPI the following will happen automagically:
+
+* The project will be built using `mvn package`.
+* Your generated .jar file will be identified and copied to Keycloak's deployments folder via Docker.
+* Keycloak will initialize your SPI.

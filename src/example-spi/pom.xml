@@ -1,0 +1,32 @@
+<project 
+	xmlns="http://maven.apache.org/POM/4.0.0" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd"
+	>
+
+	<modelVersion>4.0.0</modelVersion>
+   
+	<name>Synacor Dynamic Front-End SPIs</name>
+	<groupId>com.synacor.spi</groupId>
+	<artifactId>dfe-spi</artifactId>
+	<version>${revision}</version>
+	<packaging>pom</packaging>
+
+	<properties>
+        <keycloak.version>10.0.2</keycloak.version>
+        <revision>0.0.1</revision>
+    </properties>
+
+	<modules>
+		<module>example-spi</module>
+	</modules>
+
+    <build>
+        <finalName>example-spi</finalName>
+		<resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+    </build>
+</project>

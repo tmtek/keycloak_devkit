@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module 
+	xmlns="urn:jboss:module:1.3" 
+	name="com.tmtek.spi">
+    <resources>
+        <resource-root path="example-spi.jar"/>
+    </resources>
+    <dependencies>
+        <module name="org.keycloak.keycloak-core"/>
+		<module name="org.keycloak.keycloak-services"/>
+        <module name="org.keycloak.keycloak-server-spi"/>
+        <module name="org.keycloak.keycloak-server-spi-private"/>
+        <module name="org.jboss.spec.javax.ws.rs.jboss-jaxrs-api_2.1_spec"/>
+		<module name="com.google.code.gson"/>
+    </dependencies>
+</module>
