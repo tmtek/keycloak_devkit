@@ -11,7 +11,7 @@ This is a template project used to build and test Keycloak Themes and Service Pr
 ## Commands
 * `npm i`: Use this to download all dependencies for this project.
 * `npm start`: Use this command to build and start a Keycloak Docker container using all of the supplied configurables.
-* `npm run clean`: Use this command to remove the Keycloak Docker container.
+* `npm stop`: Use this command to stop and remove the Keycloak Docker container.
 * `npm run update`: Re-copies all static themes, and SPIs to the Keycloak Docker container.
 
 
