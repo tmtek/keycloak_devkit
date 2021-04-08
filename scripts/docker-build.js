@@ -33,13 +33,11 @@ function populateArg(path) {
 }
 
 function populateVolumes() {
-	const themes = getThemes();
-	const scripts = getScripts()//;
-	const volumes = [...themes, ...scripts];
+	const volumes = [...getThemes(), ...getScripts()];
 	replace.sync({
 		files:`./docker-compose.yml`,
 		from:`%volumes%`,
-		to:themes.length > 0 ? 'volumes:\n' + volumes.join('\n') : ''
+		to:volumes.length > 0 ? 'volumes:\n' + volumes.join('\n') : ''
 	});
 }
 
