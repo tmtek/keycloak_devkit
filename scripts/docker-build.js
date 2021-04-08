@@ -4,6 +4,7 @@ const replace = require('replace-in-file');
 const dlv = require('dlv');
 const packageJs =  require('../package.json');
 const exec = require('./util/exec');
+const glob = require('glob');
 
 function copyFilesPromise(paths, options) {
 	return new Promise((resolve) => {
@@ -31,13 +32,27 @@ function populateArg(path) {
 	});
 }
 
-function populateThemes() {
-	const themes = packageJs.keycloak.themes.map(({dir, name}) => `      - "${dir}:/opt/jboss/keycloak/themes/${name}"`);
+function populateVolumes() {
+	const volumes = [...getThemes(), ...getScripts()];
 	replace.sync({
 		files:`./docker-compose.yml`,
 		from:`%volumes%`,
-		to:themes.length > 0 ? 'volumes:\n' + themes.join('\n') : ''
+		to:volumes.length > 0 ? 'volumes:\n' + volumes.join('\n') : ''
 	});
+}
+
+function getThemes() {
+	const themes = dlv(packageJs, 'keycloak.themes', [])
+	return themes.map(({dir, name}) => `      - "${dir}:/opt/jboss/keycloak/themes/${name}"`);
+}
+
+function getScripts() {
+	const found = glob.sync('./scripts/resources/docker/scripts/*', {});
+	return found ? found.map(f => {
+		const filenamePath = f.split('/');
+		const filename = filenamePath[filenamePath.length-1];
+		return `      - ${f}:/opt/jboss/startup-scripts/${filename}`
+	}): [];
 }
 
 function populateRealms() {
@@ -65,7 +80,7 @@ copyAsync([
 	populateArg('keycloak.container.port');
 	populateArg('keycloak.container.image');
 	populateArg('keycloak.container.name');
-	populateThemes();
+	populateVolumes();
 	populateRealms();
 })
 .then(() => exec(`docker build ./ -t ${packageJs.keycloak.container.image}`));
