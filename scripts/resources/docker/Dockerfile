@@ -4,6 +4,9 @@ FROM jboss/keycloak
 COPY keycloak/modules/ /opt/jboss/keycloak/modules/system/layers/keycloak/
 COPY keycloak/standalone/deployments/ /opt/jboss/keycloak/standalone/deployments/
 
+# Add Authorable SPIs:
+%spis%
+
 # Add pre-installed themes: 
 COPY keycloak/themes/ /opt/jboss/keycloak/themes/
 
