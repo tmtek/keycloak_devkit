@@ -5,6 +5,8 @@ const dlv = require('dlv');
 const packageJs =  require('../package.json');
 const exec = require('./util/exec');
 const glob = require('glob');
+const { build: buildSPIs, getDockerFileCopy } = require('./keycloak-spi-util');
+
 
 function copyFilesPromise(paths, options) {
 	return new Promise((resolve) => {
@@ -68,12 +70,21 @@ function populateRealms() {
 	});
 }
 
+function populateSPIArtifacts() {
+	replace.sync({
+		files:`./Dockerfile`,
+		from:`%spis%`,
+		to:getDockerFileCopy()
+	});
+}
+
 copyAsync([
 	'./scripts/resources/docker/Dockerfile',
 	'./scripts/resources/docker/docker-compose.yml'
 	], 
 	'./', {up:3}
 )
+.then(() => buildSPIs())
 .then(() => {
 	populateArg('keycloak.admin.username');
 	populateArg('keycloak.admin.password');
@@ -82,6 +93,7 @@ copyAsync([
 	populateArg('keycloak.container.name');
 	populateVolumes();
 	populateRealms();
+	populateSPIArtifacts();
 })
 .then(() => exec(`docker build ./ -t ${packageJs.keycloak.container.image}`));
 
