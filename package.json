@@ -1,6 +1,6 @@
 {
 	"name": "keycloak_devkit",
-	"version": "0.0.5",
+	"version": "0.0.6",
 	"keycloak": {
 		"themes": [
 			{ "name":"DevTheme", "dir": "./src/example-theme"}
