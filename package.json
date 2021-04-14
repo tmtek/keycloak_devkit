@@ -25,10 +25,10 @@
 		"keycloak:updateDeployments": "node scripts/keycloak-updateDeployments.js",
 		"keycloak:updateThemes": "node scripts/keycloak-updateThemes.js",
 		"keycloak:spi:build": "node scripts/keycloak-spi-build.js",
-		"keycloak:update": "npm run keycloak:updateDeployments; npm run keycloak:updateThemes; npm run keycloak:spi:build",
+		"keycloak:update": "npm run keycloak:updateDeployments && npm run keycloak:updateThemes && npm run keycloak:spi:build",
 		
 		"external": "node ./src/external-website/index.js",
-		"start": "npm run docker:build; npm run docker:up",
+		"start": "npm run docker:build && npm run docker:up",
 		"stop": "npm run docker:down",
 		"update": "npm run keycloak:update"
 	},
