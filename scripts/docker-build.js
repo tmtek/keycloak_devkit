@@ -24,13 +24,13 @@ function populateArg(path) {
 	replace.sync({
 		files:`./DockerFile`,
 		from:`%${path}%`,
-		to:dlv(packageJs, path)
+		to:dlv(packageJs, path, '')
 	});
 
 	replace.sync({
 		files:`./docker-compose.yml`,
 		from:`%${path}%`,
-		to:dlv(packageJs, path)
+		to:dlv(packageJs, path, '')
 	});
 }
 
@@ -91,6 +91,7 @@ copyAsync([
 	populateArg('keycloak.container.port');
 	populateArg('keycloak.container.image');
 	populateArg('keycloak.container.name');
+	populateArg('keycloak.welcome.theme');
 	populateVolumes();
 	populateRealms();
 	populateSPIArtifacts();
