@@ -6,7 +6,7 @@ This is a template project used to build and test Keycloak Themes and Service Pr
 
 * [npm](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
 * [Docker](https://docs.docker.com/get-docker/)
-* [Maven](https://maven.apache.org/install.html) (for SPI authroing)
+* [Maven](https://maven.apache.org/install.html) (for SPI authoring)
 
 
 ## Commands
@@ -87,7 +87,7 @@ Themes are composed using FTL Templates, CSS, Javascript, and properties files.
 
 [Details on building and extending Themes can be found here](https://www.keycloak.org/docs/latest/server_development/#_themes).
 
-[Keycloak Base Theme](https://github.com/keycloak/keycloak/tree/master/themes/src/main/resources/theme/base) : This is the base theme for Keycloak that most other themes extend. having this can be useful when building totally new user interfaces to replace the standard ones.
+[Keycloak Base Theme](https://github.com/keycloak/keycloak/tree/master/themes/src/main/resources/theme/base) : This is the base theme for Keycloak that most other themes extend. Having this can be useful when building totally new user interfaces to replace the standard ones.
 
 ### SPIs
 
