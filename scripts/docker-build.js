@@ -6,7 +6,16 @@ const packageJs =  require('../package.json');
 const exec = require('./util/exec');
 const glob = require('glob');
 const { build: buildSPIs, getDockerFileCopy } = require('./keycloak-spi-util');
+const detect = require('./keycloak-detect-authorables');
 
+const authorables = detect();
+const spis = authorables.filter(a => a.type === 'spi').map(a => a.path);
+const themes = authorables.filter(a => a.type === 'theme').map(a => a.path);
+
+function filename(path) {
+	const s = path.split('/');
+	return s[s.length-1];
+}
 
 function copyFilesPromise(paths, options) {
 	return new Promise((resolve) => {
@@ -44,8 +53,7 @@ function populateVolumes() {
 }
 
 function getThemes() {
-	const themes = dlv(packageJs, 'keycloak.themes', [])
-	return themes.map(({dir, name}) => `      - "${dir}:/opt/jboss/keycloak/themes/${name}"`);
+	return themes.map((path) => `      - "${path}:/opt/jboss/keycloak/themes/${filename(path)}"`);
 }
 
 function getScripts() {
@@ -74,9 +82,11 @@ function populateSPIArtifacts() {
 	replace.sync({
 		files:`./Dockerfile`,
 		from:`%spis%`,
-		to:getDockerFileCopy()
+		to:getDockerFileCopy(spis)
 	});
 }
+
+
 
 copyAsync([
 	'./scripts/resources/docker/Dockerfile',
@@ -84,7 +94,7 @@ copyAsync([
 	], 
 	'./', {up:3}
 )
-.then(() => buildSPIs())
+.then(() => buildSPIs(spis))
 .then(() => {
 	populateArg('keycloak.admin.username');
 	populateArg('keycloak.admin.password');
