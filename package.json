@@ -16,6 +16,9 @@
 		"admin": {
 			"username": "admin",
 			"password": "admin"
+		}, 
+		"welcome":{
+			"theme":"DevTheme"
 		}
 	},
 	"scripts": {

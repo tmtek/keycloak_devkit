@@ -37,7 +37,10 @@ The Keycloak instance is configured using the keycloak object of the `package.js
 		],
 		"spi":[
 			"./src/example-spi"
-		]
+		],
+		"welcome":{
+			"theme":"DevTheme"
+		}
 	}
 }
 ```
