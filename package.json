@@ -2,6 +2,7 @@
 	"name": "keycloak_devkit",
 	"version": "0.0.7",
 	"keycloak": {
+		"version":"10.0.2",
 		"container": {
 			"port": "9001",
 			"image":"keycloak:devkit",

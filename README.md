@@ -23,6 +23,7 @@ The Keycloak instance is configured using the keycloak object of the `package.js
 ```
 {
 	"keycloak": {
+		"version":"10.0.2"
 		"container": {
 			"port": "9001",
 			"image":"keycloak:dev",

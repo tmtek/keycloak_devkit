@@ -29,17 +29,18 @@ function copyAsync(files = [], dest = './', options = {}) {
 	}, Promise.resolve(true));
 }
 
-function populateArg(path) {
+function populateArg(path, formatValue = v => v) {
+	const value = formatValue(dlv(packageJs, path));
 	replace.sync({
 		files:`./DockerFile`,
 		from:`%${path}%`,
-		to:dlv(packageJs, path, '')
+		to:value
 	});
 
 	replace.sync({
 		files:`./docker-compose.yml`,
 		from:`%${path}%`,
-		to:dlv(packageJs, path, '')
+		to:value
 	});
 }
 
@@ -96,6 +97,7 @@ copyAsync([
 )
 .then(() => buildSPIs(spis))
 .then(() => {
+	populateArg('keycloak.version', v => v ? `:${v}` : '');
 	populateArg('keycloak.admin.username');
 	populateArg('keycloak.admin.password');
 	populateArg('keycloak.container.port');

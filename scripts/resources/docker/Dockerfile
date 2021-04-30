@@ -1,4 +1,4 @@
-FROM jboss/keycloak
+FROM jboss/keycloak%keycloak.version%
 
 # Add SPIs and Modules:
 COPY keycloak/modules/ /opt/jboss/keycloak/modules/system/layers/keycloak/
