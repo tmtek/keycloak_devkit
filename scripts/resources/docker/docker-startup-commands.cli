@@ -1,0 +1,3 @@
+embed-server --std-out=echo --server-config=standalone-ha.xml
+%commands%
+stop-embedded-server

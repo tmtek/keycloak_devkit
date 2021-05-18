@@ -27,6 +27,7 @@ yarn-error.log*
 
 /Dockerfile
 /docker-compose.yml
+/docker-startup-commands.cli
 
 # Hide Maven Build Artifacts
 /**/target/**/**

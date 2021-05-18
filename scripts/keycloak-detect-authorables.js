@@ -19,12 +19,16 @@ function name(detail) {
 }
 
 function detectType(details) {
-	const type = isSPI(details) || isTheme(details) || 'none';
+	const type = isModule(details) || isSPI(details) || isTheme(details) || 'none';
 	return {path:details.path, type};
 }
 
 function isSPI(details) {
 	return details.children.filter(d => d.path.match(/pom\.xml/) !== null).length > 0 && 'spi';
+}
+
+function isModule(details) {
+	return details.children.filter(d => d.path.match(/module\.xml/) !== null).length > 0 && 'module';
 }
 
 function isTheme(details) {

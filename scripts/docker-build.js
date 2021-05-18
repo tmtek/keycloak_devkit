@@ -5,12 +5,22 @@ const dlv = require('dlv');
 const packageJs =  require('../package.json');
 const exec = require('./util/exec');
 const glob = require('glob');
-const { build: buildSPIs, getDockerFileCopy } = require('./keycloak-spi-util');
+const { build: buildSPIs, getDockerFileCopy, getDockerFileModuleCopy, getModuleDetails } = require('./keycloak-spi-util');
 const detect = require('./keycloak-detect-authorables');
 
 const authorables = detect();
+const modules =  getModuleDetails(authorables.filter(a => a.type === 'module').map(a => a.path));
 const spis = authorables.filter(a => a.type === 'spi').map(a => a.path);
 const themes = authorables.filter(a => a.type === 'theme').map(a => a.path);
+
+/* 
+These commands are issued by default for all Docker instances of Keycloak.
+*/
+const startupCommands = [
+	'/subsystem=keycloak-server/theme=defaults/:write-attribute(name=cacheThemes,value=false)',
+	'/subsystem=keycloak-server/theme=defaults/:write-attribute(name=cacheTemplates,value=false)',
+	'/subsystem=keycloak-server/theme=defaults/:write-attribute(name=staticMaxAge,value=-1)'
+];
 
 function filename(path) {
 	const s = path.split('/');
@@ -58,7 +68,8 @@ function getThemes() {
 }
 
 function getScripts() {
-	const internal = glob.sync('./scripts/resources/docker/scripts/*', {});
+	//const internal = glob.sync('./scripts/resources/docker/scripts/*', {});
+	const internal = ['./docker-startup-commands.cli'];
 	const keycloakStatic = glob.sync('./keycloak/scripts/*', {});
 	const found = [...internal, ...keycloakStatic];
 	return found ? found.map(f => {
@@ -81,6 +92,26 @@ function populateRealms() {
 	});
 }
 
+function populateModuleArtifacts() {
+	replace.sync({
+		files:`./Dockerfile`,
+		from:`%modules%`,
+		to:getDockerFileModuleCopy(modules.map(m => m.name))
+	});
+
+	modules.forEach(m => {
+		startupCommands.push(`/subsystem=keycloak-server:list-add(name=providers, value=module:${m.packageName})`);
+	});
+}
+
+function applyStartupCommands() {
+	replace.sync({
+		files:`./docker-startup-commands.cli`,
+		from:`%commands%`,
+		to:startupCommands.join("\n")
+	});
+}
+
 function populateSPIArtifacts() {
 	replace.sync({
 		files:`./Dockerfile`,
@@ -97,7 +128,13 @@ copyAsync([
 	], 
 	'./', {up:3}
 )
-.then(() => buildSPIs(spis))
+.then(copyAsync([
+	'./scripts/resources/docker/docker-startup-commands.cli'
+	], 
+	'./', {up:3}
+))
+.then(() => buildSPIs([...modules.map(m=>m.name), ...spis]))
+
 .then(() => {
 	populateArg('keycloak.version', v => v ? `:${v}` : '');
 	populateArg('keycloak.admin.username');
@@ -110,6 +147,7 @@ copyAsync([
 	populateVolumes();
 	populateRealms();
 	populateSPIArtifacts();
+	populateModuleArtifacts();
+	applyStartupCommands();
 })
 .then(() => exec(`docker build ./ -t ${packageJs.keycloak.container.image}`));
-
