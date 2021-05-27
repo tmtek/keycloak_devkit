@@ -21,5 +21,6 @@ ENV KEYCLOAK_IMPORT=%realms%
 ENV KEYCLOAK_USER=%keycloak.admin.username%
 ENV KEYCLOAK_PASSWORD=%keycloak.admin.password%
 
-# Apply Welcome Theme:
+# Apply Theme Settings:
 ENV KEYCLOAK_WELCOME_THEME=%keycloak.welcome.theme%
+ENV KEYCLOAK_DEFAULT_THEME=%keycloak.defaultTheme%
