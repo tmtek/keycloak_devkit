@@ -2,18 +2,18 @@
 	"name": "keycloak_devkit",
 	"version": "0.0.8",
 	"keycloak": {
-		"version":"10.0.2",
+		"version": "10.0.2",
 		"container": {
 			"port": "9001",
-			"image":"keycloak:devkit",
-			"name":"KeycloakDevKit"
+			"image": "keycloak:devkit",
+			"name": "KeycloakDevKit"
 		},
 		"admin": {
 			"username": "admin",
 			"password": "admin"
-		}, 
-		"welcome":{
-			"theme":"example-theme"
+		},
+		"welcome": {
+			"theme": "example-theme"
 		}
 	},
 	"scripts": {
@@ -24,15 +24,17 @@
 		"keycloak:updateThemes": "node scripts/keycloak-updateThemes.js",
 		"keycloak:spi:build": "node scripts/keycloak-spi-build.js",
 		"keycloak:update": "npm run keycloak:updateDeployments && npm run keycloak:updateThemes && npm run keycloak:spi:build",
-		
+		"build:rpm:themes": "node scripts/rpm-build-themes.js",
 		"external": "node ./src/external-website/index.js",
 		"start": "npm run docker:build && npm run docker:up",
 		"stop": "npm run docker:down",
-		"update": "npm run keycloak:update"
+		"update": "npm run keycloak:update",
+		"build": "npm run build:rpm:themes"
 	},
 	"devDependencies": {
 		"copyfiles": "^2.4.0",
 		"replace-in-file": "^6.1.0",
-		"dlv": "^1.1.3"
+		"dlv": "^1.1.3",
+		"rpm-builder": "^1.2.1"
 	}
 }
