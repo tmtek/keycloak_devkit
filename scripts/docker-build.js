@@ -105,7 +105,8 @@ copyAsync([
 	populateArg('keycloak.container.port');
 	populateArg('keycloak.container.image');
 	populateArg('keycloak.container.name');
-	populateArg('keycloak.welcome.theme');
+	populateArg('keycloak.welcome.theme', v => !!v ? v : 'keycloak');
+	populateArg('keycloak.defaultTheme', v => !!v ? v : 'keycloak');
 	populateVolumes();
 	populateRealms();
 	populateSPIArtifacts();
