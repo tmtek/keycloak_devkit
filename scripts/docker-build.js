@@ -29,7 +29,7 @@ function copyAsync(files = [], dest = './', options = {}) {
 	}, Promise.resolve(true));
 }
 
-function populateArg(path, formatValue = v => v) {
+function populateArg(path, formatValue = v => !!v ? v : '') {
 	const value = formatValue(dlv(packageJs, path));
 	replace.sync({
 		files:`./DockerFile`,
@@ -58,7 +58,9 @@ function getThemes() {
 }
 
 function getScripts() {
-	const found = glob.sync('./scripts/resources/docker/scripts/*', {});
+	const internal = glob.sync('./scripts/resources/docker/scripts/*', {});
+	const keycloakStatic = glob.sync('./keycloak/scripts/*', {});
+	const found = [...internal, ...keycloakStatic];
 	return found ? found.map(f => {
 		const filenamePath = f.split('/');
 		const filename = filenamePath[filenamePath.length-1];
