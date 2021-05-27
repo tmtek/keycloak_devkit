@@ -22,7 +22,7 @@ function packageThemes() {
 		tempDir:'./build/tmp',
 		name: config.name,
 		version: process.env.BUILDID || config.version,
-		release: '1',
+		release: process.env.RELEASE ||'1',
 		buildArch: 'noarch',
 		files:themes.map(theme => {
 			const name = filename(theme);
