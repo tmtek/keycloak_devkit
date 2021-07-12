@@ -70,8 +70,9 @@ You can use this kit to author **Keycloak Themes** and **Keycloak SPIs**. You ma
 /src/example-theme
 /src/example-theme2
 /src/example-spi
+/src/example-module
 ```
-would mean that you have 2 authorable themes (example-theme, example-theme2) and 1 authorable SPI. 
+would mean that you have 2 authorable themes (example-theme, example-theme2), 1 authorable deployment SPI and 1 module. 
 
 
 
@@ -90,7 +91,7 @@ Themes are composed using FTL Templates, CSS, Javascript, and properties files.
 
 [Keycloak Base Theme](https://github.com/keycloak/keycloak/tree/master/themes/src/main/resources/theme/base) : This is the base theme for Keycloak that most other themes extend. Having this can be useful when building totally new user interfaces to replace the standard ones.
 
-### SPIs
+### SPIs (Modules and Deployments)
 
 Keycloak [Service Provider Interfaces (SPIs)](https://www.keycloak.org/docs/latest/server_development/#_providers) can be easily mounted and tested using this project. They are .jar files that extend or add new capabilities.
 
@@ -99,6 +100,15 @@ If you want to use this kit to test an SPI while you are developing it, you may 
 
 When the `npm run update` is issued and you have an authorable SPI the following will happen automagically:
 
+**Deployments:**
+
 * The project will be built using `mvn package`.
 * Your generated .jar file will be identified and copied to Keycloak's deployments folder via Docker.
 * Keycloak will initialize your SPI.
+
+**Modules:**
+
+* The project will be built using `mvn package`.
+* The module.xml and all resources listed therein will be copied to the appropriate module installation location.
+* Your module will be registered with the standalone.xml configuration file using a startup script.
+* Keycloak will initialize your module.
