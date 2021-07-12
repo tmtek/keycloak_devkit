@@ -42,86 +42,54 @@ function getDockerFileCopy(spis) {
 	return artifacts.reduce((r, artifact) => r + `COPY ${artifact} /opt/jboss/keycloak/standalone/deployments/\n`, '');
 }
 
+function parseModuleXML(module) {
+	return xmlParser.parse(fs.readFileSync(`${module}/module.xml`, 'utf8'),{
+		attributeNamePrefix : "@_",
+		attrNodeName: "attr", //default is 'false'
+		textNodeName : "#text",
+		ignoreAttributes : false,
+		ignoreNameSpace : false,
+		allowBooleanAttributes : false,
+		parseNodeValue : true,
+		parseAttributeValue : false,
+		trimValues: true,
+		cdataTagName: "__cdata", //default is 'false'
+		cdataPositionChar: "\\c",
+		parseTrueNumberOnly: false,
+		arrayMode: false, //"strict"
+		attrValueProcessor: (val, attrName) => he.decode(val, {isAttributeValue: true}),//default is a=>a
+		tagValueProcessor : (val, tagName) => he.decode(val), //default is a=>a
+		stopNodes: ["parse-me-as-string"]
+	}, true);
+}
+
 function getDockerFileModuleCopy(modules) {
-	/*
-	jboss-cli.sh --command="/subsystem=keycloak-server:list-add(name=providers, value=module:com.example.MySpi)"
-	<provider>
-    	module:packagename
-    </provider>
-
-	*/
-	const artifacts = findArtifacts(modules);
-	return modules.reduce((r, module) => {
-		
-		const data = fs.readFileSync(`${module}/module.xml`, 'utf8');
-		var jsonObj = xmlParser.parse(data,{
-			attributeNamePrefix : "@_",
-			attrNodeName: "attr", //default is 'false'
-			textNodeName : "#text",
-			ignoreAttributes : false,
-			ignoreNameSpace : false,
-			allowBooleanAttributes : false,
-			parseNodeValue : true,
-			parseAttributeValue : false,
-			trimValues: true,
-			cdataTagName: "__cdata", //default is 'false'
-			cdataPositionChar: "\\c",
-			parseTrueNumberOnly: false,
-			arrayMode: false, //"strict"
-			attrValueProcessor: (val, attrName) => he.decode(val, {isAttributeValue: true}),//default is a=>a
-			tagValueProcessor : (val, tagName) => he.decode(val), //default is a=>a
-			stopNodes: ["parse-me-as-string"]
-		}, true);
-		
-		const resourceRoot = jsonObj.module.resources['resource-root'];
-		const resourceListings = Array.isArray(resourceRoot) ? resourceRoot.map(v => '/**/target/**/' + v.attr['@_path']) : ['/**/target/**/' + resourceRoot.attr['@_path']];
-		const artifacts = findArtifacts([module], resourceListings);
-
-		const packageName = jsonObj.module.attr['@_name'];
-		const moduleFolder = `${packageName.replace(/\./g, '/')}/main`
+	return modules.reduce((r, {artifacts, moduleFolder, name}) => {
 		return  r 
 			+ artifacts.reduce((acc, artifact) =>  acc + `COPY ${artifact} /opt/jboss/keycloak/modules/system/layers/keycloak/${moduleFolder}/\n`, "")
-			+ `COPY ${module}/module.xml /opt/jboss/keycloak/modules/system/layers/keycloak/${moduleFolder}/\n`
+			+ `COPY ${name}/module.xml /opt/jboss/keycloak/modules/system/layers/keycloak/${moduleFolder}/\n`
 
 	},'');
 }
 
 
 function getModuleDetails(modules) {
-	/*
-	jboss-cli.sh --command="/subsystem=keycloak-server:list-add(name=providers, value=module:com.example.MySpi)"
-	<provider>
-    	module:packagename
-    </provider>
-	*/
-	const artifacts = findArtifacts(modules);
 	return modules.reduce((r, module) => {
-		const artifact = findArtifacts([module]);
-		const data = fs.readFileSync(`${module}/module.xml`, 'utf8');
-		var jsonObj = xmlParser.parse(data,{
-			attributeNamePrefix : "@_",
-			attrNodeName: "attr", //default is 'false'
-			textNodeName : "#text",
-			ignoreAttributes : false,
-			ignoreNameSpace : false,
-			allowBooleanAttributes : false,
-			parseNodeValue : true,
-			parseAttributeValue : false,
-			trimValues: true,
-			cdataTagName: "__cdata", //default is 'false'
-			cdataPositionChar: "\\c",
-			parseTrueNumberOnly: false,
-			arrayMode: false, //"strict"
-			attrValueProcessor: (val, attrName) => he.decode(val, {isAttributeValue: true}),//default is a=>a
-			tagValueProcessor : (val, tagName) => he.decode(val), //default is a=>a
-			stopNodes: ["parse-me-as-string"]
-		}, true);
+
+		const jsonObj = parseModuleXML(module);	
+		const resourceRoot = jsonObj.module.resources['resource-root'];
+		
+		const resourceListings = Array.isArray(resourceRoot) 
+			? resourceRoot.map(v => '/**/target/**/' + v.attr['@_path']) 
+			: ['/**/target/**/' + resourceRoot.attr['@_path']];
+
+		const artifacts = findArtifacts([module], resourceListings);
 
 		const packageName = jsonObj.module.attr['@_name'];
 		const moduleFolder = `${packageName.replace(/\./g, '/')}/main`;
 		r.push({
 			name:module,
-			artifact:artifact.toString(","),
+			artifacts,
 			packageName,
 			moduleFolder
 		});

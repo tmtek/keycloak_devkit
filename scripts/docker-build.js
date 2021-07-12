@@ -68,7 +68,6 @@ function getThemes() {
 }
 
 function getScripts() {
-	//const internal = glob.sync('./scripts/resources/docker/scripts/*', {});
 	const internal = ['./docker-startup-commands.cli'];
 	const keycloakStatic = glob.sync('./keycloak/scripts/*', {});
 	const found = [...internal, ...keycloakStatic];
@@ -96,7 +95,7 @@ function populateModuleArtifacts() {
 	replace.sync({
 		files:`./Dockerfile`,
 		from:`%modules%`,
-		to:getDockerFileModuleCopy(modules.map(m => m.name))
+		to:getDockerFileModuleCopy(modules)
 	});
 
 	modules.forEach(m => {
