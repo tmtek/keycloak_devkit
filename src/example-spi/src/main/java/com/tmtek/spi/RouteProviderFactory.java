@@ -1,5 +1,6 @@
 package com.tmtek.spi;
 
+
 import org.keycloak.Config.Scope;
 import org.keycloak.models.KeycloakSession;
 import org.keycloak.models.KeycloakSessionFactory;
@@ -13,7 +14,6 @@ import org.keycloak.theme.FreeMarkerUtil;
  */
 public abstract class RouteProviderFactory implements RealmResourceProviderFactory {
 
-	private FreeMarkerUtil freeMarker;
 	private Route route;
 
     public String getId() {
@@ -35,16 +35,12 @@ public abstract class RouteProviderFactory implements RealmResourceProviderFacto
 
 
     public RealmResourceProvider create(KeycloakSession session) {
-		return new RouteProvider(session, freeMarker, getCachedRoute().template);
+		return new RouteProvider(getCachedRoute());
     }
 
-    public void init(Scope config) {
-		freeMarker = new FreeMarkerUtil();
-    }
+    public void init(Scope config) {}
 
-	public void close() { 
-		freeMarker = null; 
-	}
+	public void close() {}
 	
 	public void postInit(KeycloakSessionFactory factory) {}
 }

@@ -4,6 +4,10 @@ FROM jboss/keycloak%keycloak.version%
 COPY keycloak/modules/ /opt/jboss/keycloak/modules/system/layers/keycloak/
 COPY keycloak/standalone/deployments/ /opt/jboss/keycloak/standalone/deployments/
 
+
+# Add Authorable Modules:
+%modules%
+
 # Add Authorable SPIs:
 %spis%
 
