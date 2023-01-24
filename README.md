@@ -112,3 +112,19 @@ When the `npm run update` is issued and you have an authorable SPI the following
 * The module.xml and all resources listed therein will be copied to the appropriate module installation location.
 * Your module will be registered with the standalone.xml configuration file using a startup script.
 * Keycloak will initialize your module.
+
+
+## Building Keycloak Images
+
+You may experience failures when starting a project using an M1 Mac. The common reason is because there is no Keycloak container available.
+
+You can build your own image of any version of Keycloak that can be used by this kit by executing the following command:
+
+```
+git clone https://github.com/keycloak/keycloak-containers
+cd keycloak-containers/server
+git checkout {keycloakVersion}
+docker build -t jboss/keycloak:{keycloakVersion} .
+```
+
+Once the image is built on your Mac and available to your local version of Docker, the Kit should start properly.
